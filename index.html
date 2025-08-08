@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Journly – Your Personal Journal</title>
+  <style>
+    :root {
+      --lavender: #e6e6fa;
+      --dark-lavender: #b497bd;
+      --accent: #9370db;
+      --text-dark: #2d2d2d;
+      --white: #fff;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: var(--lavender);
+      color: var(--text-dark);
+    }
+
+    .login-container {
+      height: 100vh;
+      background: url('bg.jpg');
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-box {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      width: 300px;
+    }
+
+    .login-box h2 {
+      text-align: center;
+      color: var(--dark-lavender);
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid var(--dark-lavender);
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: var(--accent);
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #main-content {
+      display: none;
+    }
+
+    /* Main Journly styles */
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--dark-lavender);
+      padding: 1rem 2rem;
+      color: var(--white);
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-title img {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+    }
+
+    .site-title {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .search-box {
+      padding: 0.5rem;
+      border-radius: 20px;
+      border: none;
+      width: 200px;
+    }
+
+    nav {
+      background-color: var(--accent);
+      text-align: center;
+      padding: 0.5em;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      display: none;
+      padding: 2rem;
+      background-color: var(--white);
+      margin-bottom: 2rem;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0.95;
+      border-bottom: 4px solid var(--accent);
+    }
+
+    .welcome {
+      text-align: center;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery-item {
+      height: 200px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+
+    .gallery-item.morning {
+      background-image: url('morning.jpg');
+    }
+
+    .gallery-item.evening {
+      background-image: url('evening.jpg');
+    }
+
+    .gallery-item.weekend {
+      background-image: url('weekend.jpg');
+    }
+
+    .caption {
+      position: absolute;
+      bottom: 0;
+      background: rgba(147, 112, 219, 0.8);
+      color: white;
+      width: 100%;
+      text-align: center;
+      padding: 0.5rem;
+      font-weight: bold;
+    }
+
+    .content-section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .content-section img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 15px;
+      margin: 1rem;
+      flex: 1 1 40%;
+    }
+
+    .content-section .text {
+      flex: 1 1 50%;
+      padding: 1rem;
+    }
+
+    .reverse {
+      flex-direction: row-reverse;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #333;
+      padding: 8px;
+    }
+
+    fieldset {
+      margin-top: 15px;
+      padding: 10px;
+      border: 1px solid #999;
+    }
+
+    progress {
+      width: 100%;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: var(--dark-lavender);
+      color: var(--white);
+      font-size: 0.9rem;
+      border-top: 3px solid var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .search-box {
+        width: 100%;
+        margin-top: 0.5rem;
+      }
+
+      .content-section, .reverse {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Page -->
+  <div class="login-container" id="loginPage">
+    <div class="login-box">
+      <h2>Login to Journly</h2>
+      <form onsubmit="return handleLogin()">
+        <label for="username">Username</label>
+        <input type="text" id="username" required placeholder="Enter Username" />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="Enter Password" />
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Journly Website -->
+  <div id="main-content">
+    <header class="site-header">
+      <div class="logo-title">
+        <img src="logo.png" alt="Journly Logo">
+        <h1 class="site-title">Journly</h1>
+      </div>
+      <input type="text" class="search-box" placeholder="Search...">
+    </header>
+
+    <nav>
+      <a href="#" onclick="showPage('home')">Home</a>
+      <a href="#" onclick="showPage('write')">Write</a>
+      <a href="#" onclick="showPage('previous')">Entries</a>
+      <a href="#" onclick="showPage('inspiration')">Inspiration</a>
+      <a href="#" onclick="showPage('media')">Media</a>
+      <a href="#" onclick="showPage('about')">About</a>
+      <a href="#" onclick="showPage('contact')">Contact</a>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="active">
+      <div class="banner"><img src="banner.jpg" alt="Banner"></div>
+      <div class="welcome"><h2>Welcome to Journly</h2><p>Your space to express freely.</p></div>
+      <div class="gallery">
+        <div class="gallery-item morning"><div class="caption">Morning Reflections</div></div>
+        <div class="gallery-item evening"><div class="caption">Evening Calm</div></div>
+        <div class="gallery-item weekend"><div class="caption">Weekend Peace</div></div>
+      </div>
+      <div class="content-section">
+        <img src="writing.webp" alt="Writing">
+        <div class="text"><h3>Write Freely</h3><p>Just start with a thought.</p></div>
+      </div>
+      <div class="content-section reverse">
+        <div class="text"><h3>Track Your Mood</h3><p>Understand emotional patterns.</p></div>
+        <img src="mood.jpg" alt="Mood">
+      </div>
+    </section>
+
+    <!-- Other Sections -->
+    <section id="write">
+    <h2>Write a New Journal Entry</h2>
+    <form>
+      <fieldset>
+        <legend>Journal Entry</legend>
+        <label for="entryDate">Date:</label>
+        <input type="date" id="entryDate" name="entryDate" required><br><br>
+        <label for="entryTitle">Title:</label>
+        <input type="text" id="entryTitle" name="entryTitle" placeholder="My Mood Today..." required><br><br>
+        <label for="entryText">Journal:</label><br>
+        <textarea id="entryText" name="entryText" rows="8" cols="60" placeholder="Write your thoughts here..." required></textarea><br><br>
+        <label for="mood">Mood:</label>
+        <select id="mood" name="mood">
+          <option>Happy</option>
+          <option>Sad</option>
+          <option>Stressed</option>
+          <option>Calm</option>
+        </select><br><br>
+        <label>Upload a photo (optional):</label>
+        <input type="file" name="moodPhoto"><br><br>
+        <label>Private Entry?</label>
+        <input type="checkbox" name="private" checked> Yes<br><br>
+        <label>Day Intensity (0-10):</label>
+        <input type="range" name="intensity" min="0" max="10"><br><br>
+        <label>Email (optional):</label>
+        <input type="email" name="email"><br><br>
+        <input type="submit" value="Save Entry">
+        <input type="reset" value="Clear Form">
+      </fieldset>
+    </form>
+  </section>
+
+    <section id="previous">
+    <h2>Your Mood Tracker</h2>
+    <table>
+      <tr><th>Date</th><th>Mood</th><th>Short Note</th></tr>
+      <tr><td>2025-07-18</td><td>Happy</td><td>Felt refreshed after writing.</td></tr>
+      <tr><td>2025-07-17</td><td>Calm</td><td>Evening walks calm me down.</td></tr>
+    </table>
+  </section>
+
+
+    <section id="inspiration">
+    <h2>Inspiration for Writing</h2>
+    <ul>
+      <li>"Journaling is like whispering to one's self and listening at the same time."</li>
+      <li>"Turn your wounds into wisdom." – Oprah Winfrey</li>
+      <li>"Write what disturbs you..." – Natalie Goldberg</li>
+    </ul>
+    <h3>Bonus Tip</h3>
+    <p>Let your <span style="font-weight:bold; color:darkblue;">inner voice</span> guide your pen.</p>
+  </section>
+
+    <section id="media">
+    <h2>Calm your mind here</h2>
+    <h3>Peaceful Drizzle</h3>
+    <audio controls>
+      <source src="rain.mp3" type="audio/mpeg">
+    </audio>
+    <h3>Mental Health Hack</h3>
+    <video width="320" height="240" controls>
+      <source src="calm.mp4" type="video/mp4">
+    </video>
+  </section>
+  <section id="about">
+    <h2>About you based on your previous entries</h2>
+    <p>Hello! I'm <strong>Nithya Rubini</strong>, a passionate coder and creative thinker who loves journaling during rainy evenings and sipping hot coffee. I find peace in the little things and love expressing myself through tech and art.</p>
+    <h2>My Favorites</h2>
+    <ul>
+      <li><strong>Season:</strong> Summer Days</li>
+      <li><strong>Hobby:</strong> Journaling & cooking</li>
+      <li><strong>Movie:</strong> Hridayam</li>
+      <li><strong>Character:</strong> Nithya from Hridayam</li>
+      <li><strong>Music-genre:</strong> Melody</li>
+    </ul>
+    <h3>Favorite Song (YouTube Embed)</h3>
+    <iframe width="420" height="315" src="https://www.youtube.com/embed/5qap5aO4i9A" title="Lo-Fi Beats" allowfullscreen></iframe>
+  </section>
+
+    <section id="contact">
+    <h2>Need Help?</h2>
+    <p>Email us at <a href="mailto:support@onlinejournal.com">support@onlinejournal.com</a></p>
+    <p>Visit our <a href="https://onlinejournalhelp.com" target="_blank">Help Center</a></p>
+  </section>
+    <footer>
+      <p>&copy; 2025 Journly | Designed with care.</p>
+    </footer>
+  </div>
+
+  <script>
+    function handleLogin() {
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+      showPage('home');
+      return false;
+    }
+
+    function showPage(id) {
+      document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+  </script>
+</body>
+</html>
